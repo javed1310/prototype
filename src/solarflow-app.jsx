@@ -253,7 +253,7 @@ function AdminApp({ onSwitch }) {
           </Card>
         ))}
       </div>
-      <BottomNav items={navItems} active={activeTab} onNav={i => { setActiveTab(i); if (i === 1) setScreen("projects"); }} primary={c.primary} />
+      <BottomNav items={navItems} active={activeTab} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("projects"); if (i === 2) setScreen("inventory"); if (i === 3) setScreen("finance"); if (i === 4) setScreen("approvals"); }} primary={c.primary} />
     </div>
   );
 
@@ -293,7 +293,7 @@ function AdminApp({ onSwitch }) {
           </Card>
         ))}
       </div>
-      <BottomNav items={navItems} active={1} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); }} primary={c.primary} />
+      <BottomNav items={navItems} active={1} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 2) setScreen("inventory"); if (i === 3) setScreen("finance"); if (i === 4) setScreen("approvals"); }} primary={c.primary} />
     </div>
   );
 
@@ -455,10 +455,53 @@ function AdminApp({ onSwitch }) {
             <Btn label="🚚 Dispatch Selected Items →" bg={c.primary} color="#fff" full />
           </div>
         </div>
-        <BottomNav items={navItems} active={2} onNav={() => setScreen("dashboard")} primary={c.primary} />
+        <BottomNav items={navItems} active={2} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("projects"); if (i === 3) setScreen("finance"); if (i === 4) setScreen("approvals"); }} primary={c.primary} />
       </div>
     );
   };
+
+  // ── FINANCE ────────────────────────────────────────────────────────────────
+  const Finance = () => (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.status} light />
+      <div style={{ background: "#fff", padding: "12px 16px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: c.primary }}>Finance</div>
+          <div style={{ fontSize: 10, color: c.textSec }}>April 2026 · MTD Overview</div>
+        </div>
+        <Badge label="↑ 18%" bg={c.successBg} color={c.success} />
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
+          <MetricCard label="Revenue MTD" value="₹4.2L" sub="↑ 18% vs last month" color={c.primaryDk} icon="₹" />
+          <MetricCard label="Collected" value="₹3.1L" sub="74% of target" color={c.success} icon="✓" />
+          <MetricCard label="Pending" value="₹1.1L" sub="3 invoices" color={c.warning} icon="⏳" />
+          <MetricCard label="Overdue" value="₹28K" sub="2 projects" color={c.danger} icon="⚠" />
+        </div>
+        <SectionLabel label="Recent Transactions" color={c.primary} />
+        {[
+          { id: "SF-089", cust: "Ravi Kumar", amt: "₹70,000", type: "Installment 2", date: "Apr 5", color: c.success, bg: c.successBg, label: "Received" },
+          { id: "SF-087", cust: "Amit Singh", amt: "₹2,10,000", type: "Final Payment", date: "Apr 3", color: c.success, bg: c.successBg, label: "Received" },
+          { id: "SF-088", cust: "Priya Sharma", amt: "₹20,000", type: "Advance", date: "Mar 30", color: c.warning, bg: c.warningBg, label: "Partial" },
+          { id: "SF-086", cust: "Meena Pillai", amt: "₹78,000", type: "Invoice Sent", date: "Mar 28", color: c.danger, bg: c.dangerBg, label: "Pending" },
+        ].map(t => (
+          <Card key={t.id} style={{ marginBottom: 10, padding: "10px 14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700 }}>{t.cust} · {t.id}</div>
+                <div style={{ fontSize: 10, color: c.textSec }}>{t.type} · {t.date}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 14, fontWeight: 800, color: c.primary }}>{t.amt}</div>
+                <Badge label={t.label} bg={t.bg} color={t.color} size={9} />
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+      <BottomNav items={navItems} active={3} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("projects"); if (i === 2) setScreen("inventory"); if (i === 4) setScreen("approvals"); }} primary={c.primary} />
+    </div>
+  );
 
   // ── APPROVALS ──────────────────────────────────────────────────────────────
   const Approvals = () => (
@@ -513,11 +556,11 @@ function AdminApp({ onSwitch }) {
           </Card>
         ))}
       </div>
-      <BottomNav items={navItems} active={0} onNav={() => setScreen("dashboard")} primary={c.primary} />
+      <BottomNav items={navItems} active={4} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("projects"); if (i === 2) setScreen("inventory"); if (i === 3) setScreen("finance"); }} primary={c.primary} />
     </div>
   );
 
-  const screens = { dashboard: <Dashboard />, projects: <ProjectsList />, "project-detail": <ProjectDetail />, inventory: <Inventory />, approvals: <Approvals /> };
+  const screens = { dashboard: <Dashboard />, projects: <ProjectsList />, "project-detail": <ProjectDetail />, inventory: <Inventory />, finance: <Finance />, approvals: <Approvals /> };
   return screens[screen] || <Dashboard />;
 }
 
@@ -613,7 +656,7 @@ function TechApp({ onSwitch }) {
           </div>
         </Card>
       </div>
-      <BottomNav items={navItems} active={0} onNav={i => { setActiveTab(i); if (i === 1) setScreen("project"); }} primary={c.primary} />
+      <BottomNav items={navItems} active={0} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("project"); if (i === 2) setScreen("photos"); if (i === 3) setScreen("notes"); if (i === 4) setScreen("more"); }} primary={c.primary} />
     </div>
   );
 
@@ -787,7 +830,102 @@ function TechApp({ onSwitch }) {
     </div>
   );
 
-  const screens = { dashboard: <TechDash />, project: <TechProject />, escalate: <Escalate />, serials: <Serials /> };
+  // ── PHOTOS SCREEN ──────────────────────────────────────────────────────────
+  const PhotosScreen = () => (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.status} light />
+      <div style={{ background: "#fff", padding: "12px 16px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: c.primary }}>Photos</div>
+          <div style={{ fontSize: 10, color: c.textSec }}>All uploaded evidence</div>
+        </div>
+        <Btn label="📷 Capture" bg={c.primary} color="#fff" small />
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px" }}>
+        <SectionLabel label="SF-2024-089 · Ravi Kumar" color={c.primary} />
+        {[["Roof assessment — Before", "Uploaded ✓", c.successBg, c.success], ["Mounting brackets installed", "Uploaded ✓", c.successBg, c.success], ["Panel placement layout", "Uploading 67%", c.primaryLt, c.primary], ["DC wiring complete", "Queued ⚡", c.infoBg, c.info]].map(([name, status, bg, col]) => (
+          <Card key={name} style={{ marginBottom: 8, padding: "10px 14px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 8, background: c.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>📷</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{name}</div>
+                <Badge label={status} bg={bg} color={col} size={9} />
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+      <BottomNav items={navItems} active={2} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("project"); if (i === 3) setScreen("notes"); if (i === 4) setScreen("more"); }} primary={c.primary} />
+    </div>
+  );
+
+  // ── NOTES SCREEN ───────────────────────────────────────────────────────────
+  const NotesScreen = () => (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.status} light />
+      <div style={{ background: "#fff", padding: "12px 16px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+        <div style={{ fontSize: 18, fontWeight: 800, color: c.primary }}>Field Notes</div>
+        <div style={{ fontSize: 10, color: c.textSec }}>All observations & logs</div>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px" }}>
+        <div style={{ background: "#fff", borderRadius: 10, border: `1px solid ${c.border}`, padding: 12, marginBottom: 12 }}>
+          <InputField placeholder="Add a note, observation, or issue..." />
+          <div style={{ display: "flex", gap: 8 }}>
+            <Btn label="📝 Text" bg={c.bg} color={c.textSec} small />
+            <Btn label="📷 Photo" bg={c.bg} color={c.textSec} small />
+            <Btn label="🎤 Voice" bg={c.bg} color={c.textSec} small />
+          </div>
+        </div>
+        {[["10:32 AM", "Wiring complete at panel 4. Need extra cable ties.", "Rahul Anand"], ["09:14 AM", "Roof surface checked — no asbestos. Safe to proceed.", "Rahul Anand"], ["08:45 AM", "Arrived on site. Customer present.", "Rahul Anand"]].map(([time, note, who]) => (
+          <Card key={time} style={{ marginBottom: 8, padding: "10px 14px" }}>
+            <div style={{ fontSize: 10, color: c.textTert, marginBottom: 4 }}>{time} · {who}</div>
+            <div style={{ fontSize: 12, color: c.text }}>{note}</div>
+          </Card>
+        ))}
+      </div>
+      <BottomNav items={navItems} active={3} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("project"); if (i === 2) setScreen("photos"); if (i === 4) setScreen("more"); }} primary={c.primary} />
+    </div>
+  );
+
+  // ── MORE SCREEN ────────────────────────────────────────────────────────────
+  const MoreScreen = () => (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.status} light />
+      <div style={{ background: c.primary, padding: "14px 16px 20px" }}>
+        <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>More</div>
+        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)" }}>Account & settings</div>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "16px 16px" }}>
+        <Card style={{ marginBottom: 16, padding: "14px 16px", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 99, background: c.primaryLt, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>👷</div>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>Rahul Anand</div>
+            <div style={{ fontSize: 11, color: c.textSec }}>Field Technician · ID: TECH-042</div>
+            <Badge label="● Online" bg={c.successBg} color={c.success} size={9} />
+          </div>
+        </Card>
+        <SectionLabel label="Quick Actions" color={c.primary} />
+        {[["📋", "Serial Numbers", "Scan & verify panel serials", "serials"], ["🚨", "Escalate Issue", "Report a problem to manager", "escalate"], ["📶", "Sync Status", "All synced · Last: just now", null]].map(([icon, label, desc, target]) => (
+          <Card key={label} style={{ marginBottom: 10, padding: "12px 14px", cursor: target ? "pointer" : "default" }} onClick={() => target && setScreen(target)}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: 22 }}>{icon}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{label}</div>
+                <div style={{ fontSize: 11, color: c.textSec }}>{desc}</div>
+              </div>
+              {target && <span style={{ fontSize: 16, color: c.textTert }}>›</span>}
+            </div>
+          </Card>
+        ))}
+        <div style={{ marginTop: 16 }}>
+          <Btn label="Logout" bg={c.dangerBg || "#FEF0F0"} color={c.danger} full />
+        </div>
+      </div>
+      <BottomNav items={navItems} active={4} onNav={i => { setActiveTab(i); if (i === 0) setScreen("dashboard"); if (i === 1) setScreen("project"); if (i === 2) setScreen("photos"); if (i === 3) setScreen("notes"); }} primary={c.primary} />
+    </div>
+  );
+
+  const screens = { dashboard: <TechDash />, project: <TechProject />, escalate: <Escalate />, serials: <Serials />, photos: <PhotosScreen />, notes: <NotesScreen />, more: <MoreScreen /> };
   return screens[screen] || <TechDash />;
 }
 
@@ -1172,57 +1310,131 @@ function CustomerApp({ onSwitch }) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// ██████████████████████   ROLE SELECT & LOGIN   ██████████████████████████████
+// ════════════════════════════════════════════════════════════════════════════
+
+const RoleSelectScreen = ({ onSelect }) => (
+  <div style={{ ...phoneWrap, background: "#0A0F1A" }}>
+    <StatusBar bg="transparent" light />
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
+      <div style={{ fontSize: 52, marginBottom: 12 }}>☀️</div>
+      <div style={{ fontSize: 30, fontWeight: 900, color: "#fff", letterSpacing: -1 }}>SolarFlow</div>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginTop: 4, marginBottom: 40, textAlign: "center" }}>End-to-End Solar Installation Platform</div>
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
+        {[
+          { id: "admin", icon: "🛡", label: "Admin", desc: "Manage projects, team & inventory", color: DS.admin.primary, bg: DS.admin.primaryLt },
+          { id: "tech", icon: "⚡", label: "Technician", desc: "View tasks & log field work", color: DS.tech.primary, bg: DS.tech.primaryLt },
+          { id: "cust", icon: "🌿", label: "Customer", desc: "Track your solar installation", color: DS.cust.primary, bg: DS.cust.primaryLt },
+        ].map(role => (
+          <button key={role.id} onClick={() => onSelect(role.id)} style={{
+            background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 14, padding: "16px 18px", cursor: "pointer", textAlign: "left",
+            display: "flex", alignItems: "center", gap: 14, transition: "all 0.2s", fontFamily: "inherit",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.borderColor = role.color; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
+          >
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: role.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>{role.icon}</div>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>{role.label}</div>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", marginTop: 2 }}>{role.desc}</div>
+            </div>
+            <div style={{ marginLeft: "auto", fontSize: 18, color: "rgba(255,255,255,0.3)" }}>›</div>
+          </button>
+        ))}
+      </div>
+    </div>
+    <div style={{ padding: "16px 24px 32px", textAlign: "center" }}>
+      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.2)" }}>Select your role to continue</div>
+    </div>
+  </div>
+);
+
+const AdminLoginScreen = ({ onLogin, onBack }) => {
+  const c = DS.admin;
+  return (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.primary} light />
+      <div style={{ background: c.primary, padding: "14px 16px 28px" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "rgba(255,255,255,0.8)", padding: 0, marginBottom: 12 }}>←</button>
+        <div style={{ fontSize: 24, fontWeight: 800, color: "#fff" }}>Admin Login</div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.65)", marginTop: 4 }}>SolarFlow Management Portal</div>
+      </div>
+      <div style={{ flex: 1, padding: "28px 24px" }}>
+        <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 8px 40px rgba(196,30,30,0.10)" }}>
+          <InputField label="Employee ID" placeholder="e.g. SF-ADM-001" icon="👤" />
+          <InputField label="PIN" placeholder="4-digit PIN" icon="🔒" />
+          <Btn label="Login →" bg={c.primary} color="#fff" full onClick={onLogin} />
+          <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: c.textSec }}>Secured access · SolarFlow v2.4</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const TechLoginScreen = ({ onLogin, onBack }) => {
+  const c = DS.tech;
+  return (
+    <div style={{ ...phoneWrap, background: c.bg }}>
+      <StatusBar bg={c.primary} light />
+      <div style={{ background: c.primary, padding: "14px 16px 28px" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "rgba(255,255,255,0.8)", padding: 0, marginBottom: 12 }}>←</button>
+        <div style={{ fontSize: 24, fontWeight: 800, color: "#fff" }}>Technician Login</div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.65)", marginTop: 4 }}>SolarFlow Field Portal</div>
+      </div>
+      <div style={{ flex: 1, padding: "28px 24px" }}>
+        <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 8px 40px rgba(212,122,8,0.10)" }}>
+          <InputField label="Technician ID" placeholder="e.g. SF-TECH-042" icon="👷" />
+          <InputField label="PIN" placeholder="4-digit PIN" icon="🔒" />
+          <Btn label="Login →" bg={c.primary} color="#fff" full onClick={onLogin} />
+          <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: c.textSec }}>Secured access · SolarFlow v2.4</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ════════════════════════════════════════════════════════════════════════════
 // ██████████████████████   MAIN APP   ████████████████████████████████████████
 // ════════════════════════════════════════════════════════════════════════════
 
 export default function SolarFlowApp() {
-  const [activeApp, setActiveApp] = useState("admin");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const tabs = [
-    { id: "admin", label: "🛡 Admin", color: DS.admin.primary },
-    { id: "tech", label: "⚡ Technician", color: DS.tech.primary },
-    { id: "cust", label: "🌞 Customer", color: DS.cust.primary },
-  ];
+  const handleSelectRole = (role) => { setSelectedRole(role); setLoggedIn(false); };
+  const handleBack = () => { setSelectedRole(null); setLoggedIn(false); };
+  const handleLogin = () => setLoggedIn(true);
+
+  const renderPhone = () => {
+    if (!selectedRole) return <RoleSelectScreen onSelect={handleSelectRole} />;
+    if (selectedRole === "admin") {
+      if (!loggedIn) return <AdminLoginScreen onLogin={handleLogin} onBack={handleBack} />;
+      return <AdminApp onSwitch={handleBack} />;
+    }
+    if (selectedRole === "tech") {
+      if (!loggedIn) return <TechLoginScreen onLogin={handleLogin} onBack={handleBack} />;
+      return <TechApp onSwitch={handleBack} />;
+    }
+    if (selectedRole === "cust") {
+      return <CustomerApp onSwitch={handleBack} />;
+    }
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0A0A0F 0%, #1A1025 50%, #0F1A12 100%)", display: "flex", flexDirection: "column", alignItems: "center", padding: "32px 20px 48px", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
-      {/* Title */}
       <div style={{ textAlign: "center", marginBottom: 28 }}>
         <div style={{ fontSize: 36, fontWeight: 900, color: "#fff", letterSpacing: -1 }}>☀ SolarFlow</div>
         <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>End-to-End Solar Installation Platform — Interactive Prototype</div>
       </div>
-      {/* App switcher */}
-      <div style={{ display: "flex", background: "rgba(255,255,255,0.06)", borderRadius: 14, padding: 4, gap: 2, marginBottom: 32, border: "1px solid rgba(255,255,255,0.1)" }}>
-        {tabs.map(tab => (
-          <button key={tab.id} onClick={() => setActiveApp(tab.id)} style={{
-            padding: "10px 20px", borderRadius: 10, border: "none", cursor: "pointer",
-            background: activeApp === tab.id ? "#fff" : "transparent",
-            color: activeApp === tab.id ? tab.color : "rgba(255,255,255,0.5)",
-            fontSize: 13, fontWeight: 700, transition: "all 0.2s", fontFamily: "inherit",
-          }}>{tab.label}</button>
-        ))}
-      </div>
-      {/* Phone */}
       <div style={{ position: "relative" }}>
-        {/* Phone frame */}
         <div style={{ position: "absolute", inset: -8, borderRadius: 48, background: "linear-gradient(135deg, #2A2A2A, #1A1A1A)", zIndex: 0, boxShadow: "0 60px 120px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)" }} />
         <div style={{ position: "relative", zIndex: 1 }}>
-          {activeApp === "admin" && <AdminApp onSwitch={setActiveApp} />}
-          {activeApp === "tech" && <TechApp onSwitch={setActiveApp} />}
-          {activeApp === "cust" && <CustomerApp onSwitch={setActiveApp} />}
+          {renderPhone()}
         </div>
       </div>
-      {/* Label */}
       <div style={{ marginTop: 24, textAlign: "center" }}>
         <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>390 × 844 · iPhone 14 Pro · Tap to navigate between screens</div>
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 10 }}>
-          {tabs.map(tab => (
-            <div key={tab.id} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <div style={{ width: 8, height: 8, borderRadius: 99, background: tab.color }} />
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{tab.label}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
